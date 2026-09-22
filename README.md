@@ -1,32 +1,102 @@
-# React + TypeScript + Vite
+# Планировщик мероприятий
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## Тема
 
-Currently, two official plugins are available:
+Планировщик мероприятий — события и регистрация на них.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Автор
 
-## React Compiler
+Мотузок И.С.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Группа
 
-## Expanding the Oxlint configuration
+24ПИ-2
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## Описание
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+Веб-приложение предназначено для планирования мероприятий, просмотра списка событий и регистрации пользователей на мероприятия.
+
+Основной сценарий работы:
+
+1. Пользователь открывает приложение.
+2. Просматривает список доступных мероприятий.
+3. Выбирает интересующее мероприятие.
+4. В дальнейшем сможет зарегистрироваться на выбранное мероприятие.
+
+## Стек технологий
+
+- React
+- TypeScript
+- Vite
+- CSS
+- Node.js
+- npm
+
+## Версия Node.js
+
+Для работы проекта требуется Node.js.
+
+Проверить установленную версию можно командой:
+
+```bash
+node -v
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Запуск
+
+Из корня скачанного проекта:
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+После запуска откройте адрес, который будет указан в терминале.
+
+Обычно это:
+
+```text
+http://localhost:5173
+```
+
+## Проверка сборки
+
+Остановите dev-сервер через:
+
+```text
+Ctrl+C
+```
+
+Затем в папке `frontend` выполните:
+
+```bash
+npm run build
+npm run preview
+```
+
+## Что работает сейчас
+
+На текущем этапе реализован начальный экран приложения.
+
+Сейчас отображаются:
+
+- название приложения;
+- описание назначения приложения;
+- раздел «Предстоящие мероприятия»;
+- текст-заглушка для будущего списка мероприятий.
+
+Также выполнена базовая настройка оформления страницы.
+
+## Текущие ограничения
+
+На текущем этапе данные о мероприятиях ещё не подключены.
+
+Формы создания мероприятий и регистрации пока отсутствуют. Они будут добавлены на следующих этапах разработки.
+
+Список мероприятий пока является статическим, без загрузки данных из базы данных или API.
+
+ ## Versions
+
+ node --version v22.20.0
+ 
