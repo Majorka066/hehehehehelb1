@@ -1,23 +1,21 @@
+import { Navigate, Route, Routes } from 'react-router'
+import { AppLayout } from './app/AppLayout'
+import { EventDetailsPage } from './pages/EventDetailsPage'
+import { EventsPage } from './pages/EventsPage'
+import { NewEventPage } from './pages/NewEventPage'
+import { NotFoundPage } from './pages/NotFoundPage'
 import './App.css'
-
-const appTitle: string = 'Планировщик мероприятий'
 
 export default function App() {
   return (
-    <main className="app">
-      <h1>{appTitle}</h1>
-
-      <p>
-        Планирование мероприятий, просмотр событий и регистрация на них.
-      </p>
-
-      <section>
-        <h2>Предстоящие мероприятия</h2>
-
-        <p>
-          Здесь появится список доступных мероприятий.
-        </p>
-      </section>
-    </main>
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route index element={<Navigate to="/events" replace />} />
+        <Route path="events" element={<EventsPage />} />
+        <Route path="events/new" element={<NewEventPage />} />
+        <Route path="events/:id" element={<EventDetailsPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   )
 }
