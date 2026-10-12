@@ -1,17 +1,40 @@
-import { Link } from 'react-router'
+import { useNavigate } from 'react-router'
+import { EventForm } from '../components/EventForm'
+import type { EventDraft } from '../types/event'
 
-export function NewEventPage() {
+type NewEventPageProps = {
+  onCreate: (draft: EventDraft) => string
+}
+
+const emptyEvent: EventDraft = {
+  title: '',
+  description: '',
+  startDate: '',
+  endDate: '',
+  location: '',
+  category: 'education',
+  status: 'registration_open',
+  rating: '',
+}
+
+export function NewEventPage({ onCreate }: NewEventPageProps) {
+  const navigate = useNavigate()
+
+  function handleSave(draft: EventDraft) {
+    const id = onCreate(draft)
+    navigate(`/events/${id}`)
+  }
+
   return (
-    <section className="form-placeholder" aria-labelledby="new-event-heading">
+    <section className="form-page" aria-labelledby="new-event-heading">
       <p className="eyebrow">Новое событие</p>
       <h1 id="new-event-heading">Создание мероприятия</h1>
-      <p>
-        Форма с вводом названия, даты, места и описания появится в лабораторной работе № 3.
-      </p>
-      <p className="form-placeholder__note">
-        На этом этапе приложение использует типизированные демонстрационные данные без сохранения.
-      </p>
-      <Link className="button" to="/events">Вернуться к списку</Link>
+      <p className="form-page__lead">Заполните данные мероприятия. Они будут доступны до обновления страницы.</p>
+      <EventForm
+        initialValues={emptyEvent}
+        onSave={handleSave}
+        onCancel={() => navigate('/events')}
+      />
     </section>
   )
 }

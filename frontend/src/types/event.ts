@@ -15,4 +15,9 @@ export type Event = {
   location: string
   category: EventCategory
   status: EventStatus
+  rating: number
+}
+
+export type EventDraft = Omit<Event, 'id' | 'rating'> & {
+  rating: string
 }

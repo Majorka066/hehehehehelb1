@@ -1,4 +1,4 @@
-import { Link } from 'react-router'
+  import { Link } from 'react-router' // take events cherez props //
 import { eventCategoryLabels, eventStatusLabels } from '../data/events'
 import type { Event } from '../types/event'
 import { formatEventDate } from '../utils/formatEventDate'

@@ -20,6 +20,17 @@
   border-bottom: 1px solid #d9d7cf;
 }
 
+.memory-notice {
+  width: min(1180px, calc(100% - 40px));
+  margin: 14px auto 0;
+  padding: 12px 16px;
+  border-left: 4px solid #e77c46;
+  color: #6f4b3d;
+  background: #fbf0e6;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
@@ -81,6 +92,7 @@
 .hero h1,
 .details-page h1,
 .form-placeholder h1,
+.form-page h1,
 .message-page h1 {
   max-width: 850px;
   margin: 12px 0 20px;
@@ -96,6 +108,7 @@
 .hero__lead,
 .details-page__header > p,
 .form-placeholder > p,
+.form-page__lead,
 .message-page > p {
   max-width: 720px;
   margin: 0;
@@ -118,6 +131,7 @@
   align-items: center;
   justify-content: center;
   padding: 12px 20px;
+  border: 0;
   border-radius: 999px;
   color: #ffffff;
   background: #245f4b;
@@ -126,12 +140,100 @@
   line-height: 1.2;
   text-align: center;
   text-decoration: none;
+  cursor: pointer;
   transition: transform 160ms ease, background 160ms ease;
 }
 
 .button:hover {
   background: #173d31;
   transform: translateY(-2px);
+}
+
+.button:disabled,
+.filter-reset:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.button--secondary {
+  color: #245f4b;
+  background: #e2ebe5;
+  box-shadow: none;
+}
+
+.button--secondary:hover {
+  color: #173d31;
+  background: #d1e0d7;
+}
+
+.button--danger {
+  background: #a33b32;
+}
+
+.button--danger:hover {
+  background: #812c26;
+}
+
+.event-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #dedbd2;
+  border-radius: 18px;
+  background: #fffdf8;
+}
+
+.event-filter label {
+  display: grid;
+  min-width: min(100%, 285px);
+  gap: 7px;
+  color: #53615b;
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
+.event-filter select,
+.event-form input,
+.event-form textarea,
+.event-form select {
+  width: 100%;
+  border: 1px solid #bfc8c1;
+  border-radius: 10px;
+  color: #263a31;
+  background: #ffffff;
+  font: inherit;
+}
+
+.event-filter select,
+.event-form input,
+.event-form select {
+  min-height: 44px;
+  padding: 9px 11px;
+}
+
+.event-form textarea {
+  min-height: 128px;
+  padding: 11px;
+  resize: vertical;
+}
+
+.filter-reset {
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 1px solid #245f4b;
+  border-radius: 10px;
+  color: #245f4b;
+  background: transparent;
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.filter-reset:hover:not(:disabled) {
+  background: #e2ebe5;
 }
 
 .event-list {
@@ -272,6 +374,7 @@ dd {
 
 .details-page__header h1,
 .form-placeholder h1,
+.form-page h1,
 .message-page h1 {
   font-size: clamp(2.4rem, 6vw, 4.5rem);
 }
@@ -281,6 +384,13 @@ dd {
   border: 1px solid #dedbd2;
   border-radius: 22px;
   background: #fffdf8;
+}
+
+.details-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
 }
 
 .details-list {
@@ -309,6 +419,54 @@ dd {
   border: 1px solid #dedbd2;
   border-radius: 28px;
   background: #fffdf8;
+}
+
+.form-page {
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.event-form {
+  margin-top: 34px;
+  padding: 30px;
+  border: 1px solid #dedbd2;
+  border-radius: 22px;
+  background: #fffdf8;
+}
+
+.event-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.event-form__field {
+  display: grid;
+  gap: 8px;
+  color: #374a41;
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
+.event-form__field--wide {
+  grid-column: 1 / -1;
+}
+
+.form-error {
+  margin: 24px 0 0;
+  padding: 12px 14px;
+  border-left: 4px solid #a33b32;
+  color: #7d2722;
+  background: #fbedeb;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.event-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
 }
 
 .form-placeholder__note {
@@ -378,7 +536,8 @@ dd {
   }
 
   .event-list,
-  .details-list {
+  .details-list,
+  .event-form__grid {
     grid-template-columns: 1fr;
   }
 
@@ -389,12 +548,24 @@ dd {
   .form-placeholder {
     padding: 36px 24px;
   }
+
+  .event-filter {
+    align-items: stretch;
+  }
+
+  .filter-reset {
+    width: 100%;
+  }
 }
 
 @media (max-width: 430px) {
   .site-header,
   .page-content,
   .site-footer {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .memory-notice {
     width: min(100% - 28px, 1180px);
   }
 
@@ -419,7 +590,8 @@ dd {
   }
 
   .event-card,
-  .details-panel {
+  .details-panel,
+  .event-form {
     padding: 22px;
   }
 

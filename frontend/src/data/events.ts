@@ -21,6 +21,7 @@ export const events: Event[] = [
       'Практический воркшоп о структуре интерфейса, компонентах и типизации данных.',
     startDate: '2026-10-03T10:00:00+03:00',
     endDate: '2026-10-03T13:00:00+03:00',
+    rating: 4.5,
     location: 'Корпус A, аудитория 204',
     category: 'education',
     status: 'registration_open',
@@ -35,6 +36,7 @@ export const events: Event[] = [
     location: 'Медиатека, большой зал',
     category: 'technology',
     status: 'few_places',
+    rating: 4.8,
   },
   {
     id: 'event-3',
@@ -46,6 +48,7 @@ export const events: Event[] = [
     location: 'Главный холл университета',
     category: 'culture',
     status: 'registration_open',
+    rating: 4.1,
   },
   {
     id: 'event-4',
@@ -57,6 +60,7 @@ export const events: Event[] = [
     location: 'Корпус B, конференц-зал',
     category: 'career',
     status: 'few_places',
+    rating: 3.8,
   },
   {
     id: 'event-5',
@@ -68,6 +72,7 @@ export const events: Event[] = [
     location: 'Инновационный центр, 1 этаж',
     category: 'technology',
     status: 'registration_closed',
+    rating: 4.9,
   },
   {
     id: 'event-6',
@@ -79,5 +84,6 @@ export const events: Event[] = [
     location: 'Онлайн, ссылка после регистрации',
     category: 'education',
     status: 'registration_open',
+    rating: 2.3,
   },
 ]

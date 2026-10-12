@@ -1,11 +1,17 @@
-import { Link, useParams } from 'react-router'
-import { eventCategoryLabels, events, eventStatusLabels } from '../data/events'
+import { Link, useNavigate, useParams } from 'react-router'
+import { eventCategoryLabels, eventStatusLabels } from '../data/events'
+import type { Event } from '../types/event'
 import { formatEventDate } from '../utils/formatEventDate'
 
-export function EventDetailsPage() {
-  const { id } = useParams()
-  const event = events.find((item) => item.id === id)
+type EventDetailsPageProps = {
+  events: Event[]
+  onDelete: (id: string) => void
+}
 
+export function EventDetailsPage({ events, onDelete }: EventDetailsPageProps) {
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const event = events.find((item) => item.id === id)
   if (!event) {
     return (
       <section className="message-page" aria-labelledby="missing-event-heading">
@@ -34,6 +40,22 @@ export function EventDetailsPage() {
         <p>{event.description}</p>
       </header>
 
+      <div className="details-page__actions">
+        <Link className="button" to={`/events/${event.id}/edit`}>Редактировать</Link>
+        <button
+          className="button button--danger"
+          type="button"
+          onClick={() => {
+            if (window.confirm(`Удалить мероприятие «${event.title}»?`)) {
+              onDelete(event.id)
+              navigate('/events', { replace: true })
+            }
+          }}
+        >
+          Удалить
+        </button>
+      </div>
+
       <section className="details-panel" aria-label="Информация о мероприятии">
         <dl className="details-list">
           <div>
@@ -59,6 +81,10 @@ export function EventDetailsPage() {
           <div>
             <dt>Код мероприятия</dt>
             <dd>{event.id}</dd>
+          </div>
+          <div>
+            <dt>Рейтинг</dt>
+            <dd>{event.rating}</dd>
           </div>
         </dl>
       </section>

@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router'
+import { NavLink, Outlet } from 'react-router' // obs obolochka navig/ outlet //
 
 export function AppLayout() {
   return (
@@ -18,6 +18,10 @@ export function AppLayout() {
           <NavLink to="/events/new">Создать</NavLink>
         </nav>
       </header>
+
+      <p className="memory-notice">
+        Изменения хранятся только до обновления страницы. После обновления вернутся демонстрационные мероприятия.
+      </p>
 
       <main className="page-content">
         <Outlet />
