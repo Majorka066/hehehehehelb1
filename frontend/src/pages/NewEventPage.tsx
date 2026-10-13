@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router' // показывает пустую
 import { EventForm } from '../components/EventForm'
 import type { EventDraft } from '../types/event'
 

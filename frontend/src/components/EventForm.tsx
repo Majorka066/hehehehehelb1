@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react' // форма, для двух
 import type { FormEvent } from 'react'
 import type { EventCategory, EventDraft, EventStatus } from '../types/event'
 

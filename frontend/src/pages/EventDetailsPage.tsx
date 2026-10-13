@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from 'react-router'
+import { Link, useNavigate, useParams } from 'react-router'  // просмотр одной
 import { eventCategoryLabels, eventStatusLabels } from '../data/events'
 import type { Event } from '../types/event'
 import { formatEventDate } from '../utils/formatEventDate'

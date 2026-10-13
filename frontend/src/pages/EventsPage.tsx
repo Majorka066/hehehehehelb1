@@ -1,5 +1,5 @@
 import { Link } from 'react-router' // билд список. дл каж. карт. ключ. - //
-import { EventCard } from '../components/EventCard'
+import { EventCard } from '../components/EventCard'  // показ всех карт компон
 import { useState } from 'react'
 import { eventStatusLabels } from '../data/events'
 import type { Event, EventStatus } from '../types/event'
