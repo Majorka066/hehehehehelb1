@@ -462,6 +462,23 @@ dd {
   line-height: 1.5;
 }
 
+.event-form__reference-state {
+  color: #53615b;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.event-form__reference-state p {
+  margin: 0;
+}
+
+.event-form__reference-state div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
 .event-form__actions {
   display: flex;
   flex-wrap: wrap;

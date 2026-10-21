@@ -1,16 +1,9 @@
-import type { Event, EventCategory, EventStatus } from '../types/event'
+import type { Event, EventStatus } from '../types/event'
 
 export const eventStatusLabels: Record<EventStatus, string> = {
   registration_open: 'Идёт регистрация',
   few_places: 'Мало мест',
   registration_closed: 'Регистрация закрыта',
-}
-
-export const eventCategoryLabels: Record<EventCategory, string> = {
-  education: 'Образование',
-  technology: 'Технологии',
-  culture: 'Культура',
-  career: 'Карьера',
 }
 
 export const events: Event[] = [

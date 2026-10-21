@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router'  // просмотр одной
-import { eventCategoryLabels, eventStatusLabels } from '../data/events'
+import { eventStatusLabels } from '../data/events'
 import type { Event } from '../types/event'
 import { formatEventDate } from '../utils/formatEventDate'
 
@@ -31,7 +31,7 @@ export function EventDetailsPage({ events, onDelete }: EventDetailsPageProps) {
 
       <header className="details-page__header">
         <div className="event-card__meta">
-          <span className="eyebrow">{eventCategoryLabels[event.category]}</span>
+          <span className="eyebrow">Категория: {event.category}</span>
           <span className={`status status--${event.status}`}>
             {eventStatusLabels[event.status]}
           </span>
@@ -72,7 +72,7 @@ export function EventDetailsPage({ events, onDelete }: EventDetailsPageProps) {
           </div>
           <div>
             <dt>Категория</dt>
-            <dd>{eventCategoryLabels[event.category]}</dd>
+            <dd>{event.category}</dd>
           </div>
           <div>
             <dt>Статус</dt>

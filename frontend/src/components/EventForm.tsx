@@ -1,6 +1,7 @@
 import { useState } from 'react' // форма, для двух
 import type { FormEvent } from 'react'
-import type { EventCategory, EventDraft, EventStatus } from '../types/event'
+import { useCategories } from '../hooks/useCategories'
+import type { EventDraft, EventStatus } from '../types/event'
 
 type EventFormProps = {
   initialValues: EventDraft
@@ -12,16 +13,21 @@ function isEventStatus(value: string): value is EventStatus {
   return value === 'registration_open' || value === 'few_places' || value === 'registration_closed'
 }
 
-function isEventCategory(value: string): value is EventCategory {
-  return value === 'education' || value === 'technology' || value === 'culture' || value === 'career'
-}
-
 export function EventForm({ initialValues, onSave, onCancel }: EventFormProps) {
   const [draft, setDraft] = useState(() => ({ ...initialValues }))
   const [error, setError] = useState('')
+  const { load, retry } = useCategories()
+  const categories = load.status === 'success' ? load.data : []
+  const selectedCategoryExists = categories.some((category) => category.id === draft.category)
+  const canSave = load.status === 'success' && selectedCategoryExists
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+
+    if (!canSave) {
+      setError('Дождитесь справочника и выберите доступную категорию.')
+      return
+    }
 
     const title = draft.title.trim()
     const description = draft.description.trim()
@@ -123,20 +129,40 @@ export function EventForm({ initialValues, onSave, onCancel }: EventFormProps) {
           <select
             id="event-category"
             value={draft.category}
-            onChange={(event) => {
-              const category = event.target.value
-
-              if (isEventCategory(category)) {
-                setDraft({ ...draft, category })
-              }
-            }}
+            required
+            disabled={load.status !== 'success' || categories.length === 0}
+            onChange={(event) => setDraft({ ...draft, category: event.target.value })}
           >
-            <option value="education">Образование</option>
-            <option value="technology">Технологии</option>
-            <option value="culture">Культура</option>
-            <option value="career">Карьера</option>
+            <option value="">Выберите категорию</option>
+            {draft.category !== '' && !selectedCategoryExists && (
+              <option value={draft.category} disabled>
+                Текущий код: {draft.category} — выберите доступную категорию
+              </option>
+            )}
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>{category.name}</option>
+            ))}
           </select>
         </label>
+
+        <div className="event-form__reference-state event-form__field--wide">
+          {load.status === 'loading' && <p role="status">Загружаем категории…</p>}
+          {load.status === 'error' && (
+            <div>
+              <p role="alert">{load.message}</p>
+              <button className="filter-reset" type="button" onClick={retry}>Повторить</button>
+            </div>
+          )}
+          {load.status === 'success' && categories.length === 0 && (
+            <div>
+              <p role="status">Категорий пока нет. Сохранение недоступно.</p>
+              <button className="filter-reset" type="button" onClick={retry}>Повторить</button>
+            </div>
+          )}
+          {load.status === 'success' && draft.category !== '' && !selectedCategoryExists && (
+            <p role="alert">Выберите доступную категорию для сохранения.</p>
+          )}
+        </div>
 
         <label className="event-form__field" htmlFor="event-status">
           <span>Статус</span>
@@ -176,7 +202,7 @@ export function EventForm({ initialValues, onSave, onCancel }: EventFormProps) {
       {error && <p className="form-error" role="alert">{error}</p>}
 
       <div className="event-form__actions">
-        <button className="button" type="submit">Сохранить</button>
+        <button className="button" type="submit" disabled={!canSave}>Сохранить</button>
         <button className="button button--secondary" type="button" onClick={onCancel}>Отмена</button>
       </div>
     </form>

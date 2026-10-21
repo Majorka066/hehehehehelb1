@@ -1,11 +1,5 @@
 export type EventStatus = 'registration_open' | 'few_places' | 'registration_closed'
 
-export type EventCategory =
-  | 'education'
-  | 'technology'
-  | 'culture'
-  | 'career'
-
 export type Event = {
   id: string
   title: string
@@ -13,7 +7,7 @@ export type Event = {
   startDate: string
   endDate: string
   location: string
-  category: EventCategory
+  category: string
   status: EventStatus
   rating: number
 }

@@ -12,7 +12,7 @@ const emptyEvent: EventDraft = {
   startDate: '',
   endDate: '',
   location: '',
-  category: 'education',
+  category: '',
   status: 'registration_open',
   rating: '',
 }

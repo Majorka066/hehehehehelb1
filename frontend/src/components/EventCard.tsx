@@ -1,5 +1,5 @@
   import { Link } from 'react-router' // take events cherez props //
-import { eventCategoryLabels, eventStatusLabels } from '../data/events'
+import { eventStatusLabels } from '../data/events'
 import type { Event } from '../types/event'
 import { formatEventDate } from '../utils/formatEventDate'
 
@@ -11,7 +11,7 @@ export function EventCard({ event }: EventCardProps) {
   return (
     <article className="event-card">
       <div className="event-card__meta">
-        <span className="eyebrow">{eventCategoryLabels[event.category]}</span>
+        <span className="eyebrow">Категория: {event.category}</span>
         <span className={`status status--${event.status}`}>
           {eventStatusLabels[event.status]}
         </span>
