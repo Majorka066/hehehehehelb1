@@ -1,7 +1,0 @@
-[
-  { "id": "education", "name": "Образование" },
-  { "id": "technology", "name": "Технологии" },
-  { "id": "culture", "name": "Культура" },
-  { "id": "career", "name": "Карьера" },
-  { "id": "sport", "name": "Спорт" }
-]

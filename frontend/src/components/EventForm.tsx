@@ -159,6 +159,9 @@ export function EventForm({ initialValues, onSave, onCancel }: EventFormProps) {
               <button className="filter-reset" type="button" onClick={retry}>Повторить</button>
             </div>
           )}
+          {load.status === 'success' && categories.length > 0 && (
+            <button className="filter-reset" type="button" onClick={retry}>Обновить справочник</button>
+          )}
           {load.status === 'success' && draft.category !== '' && !selectedCategoryExists && (
             <p role="alert">Выберите доступную категорию для сохранения.</p>
           )}
