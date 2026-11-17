@@ -1,17 +1,30 @@
+import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'  // просмотр одной
 import { eventStatusLabels } from '../data/events'
 import type { Event } from '../types/event'
+import type { EventsLoad } from '../types/eventsLoad'
 import { formatEventDate } from '../utils/formatEventDate'
 
 type EventDetailsPageProps = {
   events: Event[]
-  onDelete: (id: string) => void
+  load: EventsLoad
+  onDelete: (id: string) => Promise<void>
 }
 
-export function EventDetailsPage({ events, onDelete }: EventDetailsPageProps) {
+export function EventDetailsPage({ events, load, onDelete }: EventDetailsPageProps) {
   const { id } = useParams()
   const navigate = useNavigate()
   const event = events.find((item) => item.id === id)
+  const [pending, setPending] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
+  if (load.status === 'loading') {
+    return <p className="request-state" role="status">Загружаем мероприятие…</p>
+  }
+
+  if (load.status === 'error') {
+    return <p className="form-error" role="alert">{load.message}</p>
+  }
+
   if (!event) {
     return (
       <section className="message-page" aria-labelledby="missing-event-heading">
@@ -45,16 +58,27 @@ export function EventDetailsPage({ events, onDelete }: EventDetailsPageProps) {
         <button
           className="button button--danger"
           type="button"
-          onClick={() => {
+          disabled={pending}
+          onClick={async () => {
             if (window.confirm(`Удалить мероприятие «${event.title}»?`)) {
-              onDelete(event.id)
-              navigate('/events', { replace: true })
+              setPending(true)
+              setDeleteError('')
+
+              try {
+                await onDelete(event.id)
+                navigate('/events', { replace: true })
+              } catch (reason: unknown) {
+                setDeleteError(reason instanceof Error ? reason.message : 'Не удалось удалить мероприятие.')
+              } finally {
+                setPending(false)
+              }
             }
           }}
         >
-          Удалить
+          {pending ? 'Удаляем…' : 'Удалить'}
         </button>
       </div>
+      {deleteError && <p className="form-error" role="alert">{deleteError}</p>}
 
       <section className="details-panel" aria-label="Информация о мероприятии">
         <dl className="details-list">

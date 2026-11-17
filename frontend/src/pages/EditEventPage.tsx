@@ -1,20 +1,30 @@
 import { Link, useNavigate, useParams } from 'react-router'
 import { EventForm } from '../components/EventForm'
 import type { Event, EventDraft } from '../types/event'
+import type { EventsLoad } from '../types/eventsLoad'
 
 type EditEventPageProps = {
   events: Event[]
-  onUpdate: (id: string, draft: EventDraft) => void
+  load: EventsLoad
+  onUpdate: (id: string, draft: EventDraft) => Promise<void>
 }
 
 function toDateTimeInput(value: string) {
   return value.slice(0, 16)
 }
 
-export function EditEventPage({ events, onUpdate }: EditEventPageProps) {
+export function EditEventPage({ events, load, onUpdate }: EditEventPageProps) {
   const { id } = useParams()
   const navigate = useNavigate()
   const event = events.find((item) => item.id === id)
+
+  if (load.status === 'loading') {
+    return <p className="request-state" role="status">Загружаем мероприятие…</p>
+  }
+
+  if (load.status === 'error') {
+    return <p className="form-error" role="alert">{load.message}</p>
+  }
 
   if (!event) {
     return (
@@ -46,8 +56,8 @@ export function EditEventPage({ events, onUpdate }: EditEventPageProps) {
       <EventForm
         key={event.id}
         initialValues={initialValues}
-        onSave={(draft) => {
-          onUpdate(event.id, draft)
+        onSave={async (draft) => {
+          await onUpdate(event.id, draft)
           navigate(`/events/${event.id}`)
         }}
         onCancel={() => navigate(`/events/${event.id}`)}

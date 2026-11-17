@@ -1,6 +1,28 @@
+import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router' // obs obolochka navig/ outlet //
 
-export function AppLayout() {
+type AppLayoutProps = {
+  email: string
+  onSignOut: () => Promise<void>
+}
+
+export function AppLayout({ email, onSignOut }: AppLayoutProps) {
+  const [pending, setPending] = useState(false)
+  const [error, setError] = useState('')
+
+  async function handleSignOut() {
+    setPending(true)
+    setError('')
+
+    try {
+      await onSignOut()
+    } catch (reason: unknown) {
+      setError(reason instanceof Error ? reason.message : 'Не удалось выйти из аккаунта.')
+    } finally {
+      setPending(false)
+    }
+  }
+
   return (
     <div className="app-shell">
       <header className="site-header">
@@ -16,12 +38,17 @@ export function AppLayout() {
         <nav className="main-nav" aria-label="Основная навигация">
           <NavLink to="/events" end>Мероприятия</NavLink>
           <NavLink to="/events/new">Создать</NavLink>
+          <span className="account-email">{email}</span>
+          <button className="nav-sign-out" type="button" onClick={handleSignOut} disabled={pending}>
+            {pending ? 'Выходим…' : 'Выйти'}
+          </button>
         </nav>
       </header>
 
       <p className="memory-notice">
-        Изменения хранятся только до обновления страницы. После обновления вернутся демонстрационные мероприятия.
+        Мероприятия сохраняются в вашем аккаунте и не видны другим пользователям.
       </p>
+      {error && <p className="layout-error" role="alert">{error}</p>}
 
       <main className="page-content">
         <Outlet />

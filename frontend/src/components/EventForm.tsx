@@ -5,7 +5,7 @@ import type { EventDraft, EventStatus } from '../types/event'
 
 type EventFormProps = {
   initialValues: EventDraft
-  onSave: (draft: EventDraft) => void
+  onSave: (draft: EventDraft) => Promise<void> // 1.
   onCancel: () => void
 }
 
@@ -16,12 +16,14 @@ function isEventStatus(value: string): value is EventStatus {
 export function EventForm({ initialValues, onSave, onCancel }: EventFormProps) {
   const [draft, setDraft] = useState(() => ({ ...initialValues }))
   const [error, setError] = useState('')
+  const [submitError, setSubmitError] = useState('')
+  const [pending, setPending] = useState(false)
   const { load, retry } = useCategories()
   const categories = load.status === 'success' ? load.data : []
   const selectedCategoryExists = categories.some((category) => category.id === draft.category)
   const canSave = load.status === 'success' && selectedCategoryExists
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     if (!canSave) {
@@ -65,7 +67,16 @@ export function EventForm({ initialValues, onSave, onCancel }: EventFormProps) {
     }
 
     setError('')
-    onSave({ ...draft, title, description, location })
+    setSubmitError('')
+    setPending(true) // zprs start
+
+    try {
+      await onSave({ ...draft, title, description, location }) // отв бд
+    } catch (reason: unknown) {
+      setSubmitError(reason instanceof Error ? reason.message : 'Не удалось сохранить мероприятие.')
+    } finally {
+      setPending(false)               // snim sost ozhud
+    }
   }
 
   return (
@@ -203,10 +214,13 @@ export function EventForm({ initialValues, onSave, onCancel }: EventFormProps) {
       </div>
 
       {error && <p className="form-error" role="alert">{error}</p>}
+      {submitError && <p className="form-error" role="alert">{submitError}</p>}
 
       <div className="event-form__actions">
-        <button className="button" type="submit" disabled={!canSave}>Сохранить</button>
-        <button className="button button--secondary" type="button" onClick={onCancel}>Отмена</button>
+        <button className="button" type="submit" disabled={!canSave || pending}>
+          {pending ? 'Сохраняем…' : 'Сохранить'}
+        </button>
+        <button className="button button--secondary" type="button" onClick={onCancel} disabled={pending}>Отмена</button>
       </div>
     </form>
   )

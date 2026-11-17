@@ -3,16 +3,19 @@ import { EventCard } from '../components/EventCard'  // показ всех ка
 import { useState } from 'react'
 import { eventStatusLabels } from '../data/events'
 import type { Event, EventStatus } from '../types/event'
+import type { EventsLoad } from '../types/eventsLoad'
 
 type EventsPageProps = {
   events: Event[]
+  load: EventsLoad
+  onRetry: () => void
 }
 
 function isEventStatus(value: string): value is EventStatus {
   return value === 'registration_open' || value === 'few_places' || value === 'registration_closed'
 }
 
-export function EventsPage({ events }: EventsPageProps) {
+export function EventsPage({ events, load, onRetry }: EventsPageProps) {
   const [status, setStatus] = useState<EventStatus | 'all'>('all')
   const visibleEvents = events.filter((event) => status === 'all' || event.status === status)
 
@@ -30,6 +33,15 @@ export function EventsPage({ events }: EventsPageProps) {
         <Link className="button" to="/events/new">Создать мероприятие</Link>
       </div>
 
+      {load.status === 'loading' ? (
+        <p className="request-state" role="status">Загружаем ваши мероприятия…</p>
+      ) : load.status === 'error' ? (
+        <div className="request-state request-state--error" role="alert">
+          <p>{load.message}</p>
+          <button className="filter-reset" type="button" onClick={onRetry}>Повторить</button>
+        </div>
+      ) : (
+        <>
       <div className="event-filter">
         <label htmlFor="event-status-filter">
           <span>Показать по статусу</span>
@@ -76,6 +88,8 @@ export function EventsPage({ events }: EventsPageProps) {
             <EventCard key={event.id} event={event} />
           ))}
         </div>
+      )}
+        </>
       )}
     </section>
   )

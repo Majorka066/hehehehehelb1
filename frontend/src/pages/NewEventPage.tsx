@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router' // показывает пустую
+import { useNavigate } from 'react-router' // показывает пустую КОГДА ЮЗ НАЖИМ
 import { EventForm } from '../components/EventForm'
 import type { EventDraft } from '../types/event'
 
 type NewEventPageProps = {
-  onCreate: (draft: EventDraft) => string
+  onCreate: (draft: EventDraft) => Promise<string>
 }
 
 const emptyEvent: EventDraft = {
@@ -20,8 +20,8 @@ const emptyEvent: EventDraft = {
 export function NewEventPage({ onCreate }: NewEventPageProps) {
   const navigate = useNavigate()
 
-  function handleSave(draft: EventDraft) {
-    const id = onCreate(draft)
+  async function handleSave(draft: EventDraft) {
+    const id = await onCreate(draft)
     navigate(`/events/${id}`)
   }
 
@@ -29,7 +29,7 @@ export function NewEventPage({ onCreate }: NewEventPageProps) {
     <section className="form-page" aria-labelledby="new-event-heading">
       <p className="eyebrow">Новое событие</p>
       <h1 id="new-event-heading">Создание мероприятия</h1>
-      <p className="form-page__lead">Заполните данные мероприятия. Они будут доступны до обновления страницы.</p>
+      <p className="form-page__lead">Заполните данные мероприятия. После сохранения оно появится в вашем списке.</p>
       <EventForm
         initialValues={emptyEvent}
         onSave={handleSave}
