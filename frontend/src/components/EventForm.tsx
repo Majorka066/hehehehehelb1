@@ -1,4 +1,4 @@
-import { useState } from 'react' // форма, для двух
+import { useRef, useState } from 'react' // форма, для двух
 import type { FormEvent } from 'react'
 import { useCategories } from '../hooks/useCategories'
 import type { EventDraft, EventStatus } from '../types/event'
@@ -18,6 +18,7 @@ export function EventForm({ initialValues, onSave, onCancel }: EventFormProps) {
   const [error, setError] = useState('')
   const [submitError, setSubmitError] = useState('')
   const [pending, setPending] = useState(false)
+  const saving = useRef(false)
   const { load, retry } = useCategories()
   const categories = load.status === 'success' ? load.data : []
   const selectedCategoryExists = categories.some((category) => category.id === draft.category)
@@ -25,6 +26,7 @@ export function EventForm({ initialValues, onSave, onCancel }: EventFormProps) {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (saving.current) return
 
     if (!canSave) {
       setError('Дождитесь справочника и выберите доступную категорию.')
@@ -68,6 +70,7 @@ export function EventForm({ initialValues, onSave, onCancel }: EventFormProps) {
 
     setError('')
     setSubmitError('')
+    saving.current = true
     setPending(true) // zprs start
 
     try {
@@ -75,6 +78,7 @@ export function EventForm({ initialValues, onSave, onCancel }: EventFormProps) {
     } catch (reason: unknown) {
       setSubmitError(reason instanceof Error ? reason.message : 'Не удалось сохранить мероприятие.')
     } finally {
+      saving.current = false
       setPending(false)               // snim sost ozhud
     }
   }

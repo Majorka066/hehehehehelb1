@@ -1,20 +1,18 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'  // просмотр одной
 import { eventStatusLabels } from '../data/events'
-import type { Event } from '../types/event'
-import type { EventsLoad } from '../types/eventsLoad'
+import { useEvent } from '../hooks/useEvent'
 import { formatEventDate } from '../utils/formatEventDate'
 
 type EventDetailsPageProps = {
-  events: Event[]
-  load: EventsLoad
   onDelete: (id: string) => Promise<void>
 }
 
-export function EventDetailsPage({ events, load, onDelete }: EventDetailsPageProps) {
+export function EventDetailsPage({ onDelete }: EventDetailsPageProps) {
   const { id } = useParams()
   const navigate = useNavigate()
-  const event = events.find((item) => item.id === id)
+  const load = useEvent(id)
+  const event = load.status === 'success' ? load.data : null
   const [pending, setPending] = useState(false)
   const [deleteError, setDeleteError] = useState('')
   if (load.status === 'loading') {
@@ -44,7 +42,7 @@ export function EventDetailsPage({ events, load, onDelete }: EventDetailsPagePro
 
       <header className="details-page__header">
         <div className="event-card__meta">
-          <span className="eyebrow">Категория: {event.category}</span>
+          <span className="eyebrow">Категория: {event.categoryName}</span>
           <span className={`status status--${event.status}`}>
             {eventStatusLabels[event.status]}
           </span>
@@ -96,7 +94,7 @@ export function EventDetailsPage({ events, load, onDelete }: EventDetailsPagePro
           </div>
           <div>
             <dt>Категория</dt>
-            <dd>{event.category}</dd>
+            <dd>{event.categoryName}</dd>
           </div>
           <div>
             <dt>Статус</dt>

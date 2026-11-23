@@ -8,10 +8,11 @@ export type Event = {
   endDate: string
   location: string
   category: string
+  categoryName: string
   status: EventStatus
   rating: number
 }
 
-export type EventDraft = Omit<Event, 'id' | 'rating'> & {
+export type EventDraft = Omit<Event, 'id' | 'rating' | 'categoryName'> & {
   rating: string
 }

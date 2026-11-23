@@ -233,6 +233,7 @@
 }
 
 .event-filter select,
+.event-filter input,
 .event-form input,
 .event-form textarea,
 .event-form select {
@@ -245,6 +246,7 @@
 }
 
 .event-filter select,
+.event-filter input,
 .event-form input,
 .event-form select {
   min-height: 44px;

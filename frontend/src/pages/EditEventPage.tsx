@@ -1,22 +1,23 @@
 import { Link, useNavigate, useParams } from 'react-router'
 import { EventForm } from '../components/EventForm'
-import type { Event, EventDraft } from '../types/event'
-import type { EventsLoad } from '../types/eventsLoad'
+import { useEvent } from '../hooks/useEvent'
+import type { EventDraft } from '../types/event'
 
 type EditEventPageProps = {
-  events: Event[]
-  load: EventsLoad
   onUpdate: (id: string, draft: EventDraft) => Promise<void>
 }
 
 function toDateTimeInput(value: string) {
-  return value.slice(0, 16)
+  const date = new Date(value)
+  const local = new Date(date.getTime() - date.getTimezoneOffset() * 60_000)
+  return local.toISOString().slice(0, 16)
 }
 
-export function EditEventPage({ events, load, onUpdate }: EditEventPageProps) {
+export function EditEventPage({ onUpdate }: EditEventPageProps) {
   const { id } = useParams()
   const navigate = useNavigate()
-  const event = events.find((item) => item.id === id)
+  const load = useEvent(id)
+  const event = load.status === 'success' ? load.data : null
 
   if (load.status === 'loading') {
     return <p className="request-state" role="status">Загружаем мероприятие…</p>

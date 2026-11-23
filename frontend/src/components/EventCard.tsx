@@ -11,7 +11,7 @@ export function EventCard({ event }: EventCardProps) {
   return (
     <article className="event-card">
       <div className="event-card__meta">
-        <span className="eyebrow">Категория: {event.category}</span>
+        <span className="eyebrow">Категория: {event.categoryName}</span>
         <span className={`status status--${event.status}`}>
           {eventStatusLabels[event.status]}
         </span>
